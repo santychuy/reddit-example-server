@@ -19,12 +19,13 @@
     "@typescript-eslint/eslint-plugin": "^4.28.3",
     "eslint": "^7.30.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-prettier": "^3.4.0",
+    "husky": "^7.0.0",
     "prettier": "^2.3.2",
     "tsc-watch": "^4.4.0",
-    "typescript": "^4.3.5",
-    "husky": "^7.0.0"
+    "typescript": "^4.3.5"
   },
   "dependencies": {
     "@mikro-orm/cli": "^4.5.7",
@@ -34,5 +35,12 @@
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "pg": "^8.6.0"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/mikro-orm.config.ts",
+      "./dist/mikro-orm.config.js"
+    ]
   }
 }
