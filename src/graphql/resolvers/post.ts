@@ -3,6 +3,8 @@ import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 import { Post } from '../../entities/Post';
 import { MyContext } from '../../types/graphql';
 
+import { InputUpdatePost } from '../inputs/UpdatePost';
+
 @Resolver()
 export class PostResolver {
   @Query(() => [Post])
@@ -30,10 +32,10 @@ export class PostResolver {
 
   @Mutation(() => Post)
   async updatePost(
-    @Arg('title') title: string,
-    @Arg('id') id: string,
+    @Arg('inputUpdateUser') input: InputUpdatePost,
     @Ctx() { connection }: MyContext
   ): Promise<Post | undefined> {
+    const { id, title } = input;
     const post = await connection.manager.findOne(Post, id);
     if (!post) return undefined;
 

@@ -3,16 +3,19 @@ import { Field, ObjectType, ID } from 'type-graphql';
 
 @ObjectType()
 @Entity()
-export class Post {
+export class User {
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Field(() => String)
   @Column({ type: 'varchar' })
-  title: string;
+  name: string;
 
   @Field(() => String)
+  @Column({ type: 'varchar', unique: true })
+  username: string;
+
   @Column({ type: 'varchar' })
-  description: string;
+  password: string;
 }
