@@ -1,10 +1,14 @@
-import { Entity, Property, PrimaryKey } from '@mikro-orm/core';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Field, ObjectType, ID } from 'type-graphql';
 
+@ObjectType()
 @Entity()
 export class Post {
-  @PrimaryKey()
-  id: number;
+  @Field(() => ID)
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Property()
+  @Field(() => String)
+  @Column({ type: 'varchar' })
   title!: string;
 }
