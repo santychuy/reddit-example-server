@@ -23,10 +23,19 @@ export class UserResolver {
     return connection.manager.findOne(User, id);
   }
 
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() { req, connection }: MyContext): Promise<User | undefined> {
+    if (!req.session.userId) return undefined;
+
+    const user = await connection.manager.findOne(User, req.session.userId);
+
+    return user;
+  }
+
   @Mutation(() => User)
   async signUp(
     @Arg('inputSignUp') input: InputSignUp,
-    @Ctx() { connection }: MyContext
+    @Ctx() { connection, req }: MyContext
   ): Promise<User> {
     const { name, password, username } = input;
 
@@ -37,14 +46,18 @@ export class UserResolver {
       username,
       password: hashedPass,
     });
+
     await connection.manager.save(user);
+
+    req.session.userId = user.id;
+
     return user;
   }
 
   @Mutation(() => UserResponse)
   async signIn(
     @Arg('inputSignUp') input: InputSignIn,
-    @Ctx() { connection }: MyContext
+    @Ctx() { connection, req }: MyContext
   ): Promise<UserResponse> {
     const { password, username } = input;
 
@@ -63,6 +76,8 @@ export class UserResolver {
         errors: [{ message: 'Usuario o contraseña no son válidos' }],
       };
     }
+
+    req.session.userId = user.id;
 
     return {
       user,
