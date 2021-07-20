@@ -1,10 +1,8 @@
 import express from 'express';
 import redis from 'redis';
+import cors from 'cors';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
-/* import morgan from 'morgan';
-import helmet from 'helmet';
-import cors from 'cors'; */
 
 import { initGraphql } from './graphql';
 
@@ -12,6 +10,13 @@ const RedisStore = connectRedis(session);
 const redisClient = redis.createClient();
 
 const app = express();
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 
 app.use(
   session({
@@ -25,7 +30,7 @@ app.use(
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
     },
-    name: 'lomalinda',
+    name: process.env.NAME_SESSION,
     saveUninitialized: false,
     secret: process.env.SECRET_SESSION,
     resave: false,

@@ -4,7 +4,6 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-co
 import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
 
-import { MyContext } from '../types/graphql';
 import { PostResolver } from './resolvers/post';
 import { UserResolver } from './resolvers/user';
 
@@ -16,11 +15,14 @@ export const initGraphql = async (app: Application) => {
       resolvers: [PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyContext => ({ req, res, connection }),
+    context: ({ req, res }) => ({ req, res, connection }),
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
   });
 
   await apolloServer.start();
 
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({
+    app,
+    cors: false,
+  });
 };
