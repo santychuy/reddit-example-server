@@ -9,6 +9,7 @@ import { UserResolver } from './resolvers/user';
 
 export const initGraphql = async (app: Application) => {
   const connection = await createConnection();
+  await connection.runMigrations();
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
